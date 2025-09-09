@@ -14,8 +14,25 @@ Para ilustrar el uso del framework Spring, y el ambiente de desarrollo para el u
 
 	* GrammarChecker será un bean, que tiene como dependencia algo de tipo 'SpellChecker'.
 	* EnglishSpellChecker y SpanishSpellChecker son los dos posibles candidatos a ser inyectados. Se debe seleccionar uno, u otro, mas NO ambos (habría conflicto de resolución de dependencias). Por ahora haga que se use EnglishSpellChecker.
- 
-5.	Haga un programa de prueba, donde se cree una instancia de GrammarChecker mediante Spring, y se haga uso de la misma:
+
+Forma en la que se organizo las inyecciones y dependencias:
+
+Clase EnglishSpellChecker y SpanishSpellChecker, tienen la etiqueta de @Service, siendo estas los servicios que se inyectan en GrammarChecker
+
+EnglishSpellChecker:
+
+![](img/EnglishChecker.png)
+
+SpanishSpellChecker:
+
+![](img/Spanish.png)
+
+En la clase de GrammarChecker lo tenemos marcado con un @Service es donde estamos inyectando SpanishSpellChecker o EnglishSpellChecker con @Autowired. Debido que nostros tenemos mas posibles inyecciones, nosotros decidimos cual inyectar usando el @Quallifier
+
+![](img/GrammarChecker.png)
+
+
+4. Haga un programa de prueba, donde se cree una instancia de GrammarChecker mediante Spring, y se haga uso de la misma:
 
 	```java
 	public static void main(String[] args) {
@@ -24,5 +41,10 @@ Para ilustrar el uso del framework Spring, y el ambiente de desarrollo para el u
 		System.out.println(gc.check("la la la "));
 	}
 	```
-	
-6.	Modifique la configuración con anotaciones para que el Bean ‘GrammarChecker‘ ahora haga uso del  la clase SpanishSpellChecker (para que a GrammarChecker se le inyecte EnglishSpellChecker en lugar de  SpanishSpellChecker. Verifique el nuevo resultado.
+ ![](img/EnglishAnswer.png)
+
+5. Modifique la configuración con anotaciones para que el Bean ‘GrammarChecker‘ ahora haga uso de la clase SpanishSpellChecker (para que a GrammarChecker se le inyecte EnglishSpellChecker en lugar de SpanishSpellChecker. Verifique el nuevo resultado.
+
+En la clase de GrammarChecker fuimos al @Autowired y en el @Quallifier en lugar de englishSpellChecker, colocamos spanishSpellChecker
+
+![](img/SpanishAnswer.png)
