@@ -10,6 +10,8 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
+
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
@@ -20,7 +22,7 @@ import static org.junit.Assert.*;
  * @author hcadavid
  */
 public class InMemoryPersistenceTest {
-    
+
     @Test
     public void saveNewAndLoadTest() throws BlueprintPersistenceException, BlueprintNotFoundException{
         InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
@@ -65,10 +67,53 @@ public class InMemoryPersistenceTest {
         catch (BlueprintPersistenceException ex){
             
         }
-                
+
+
         
     }
 
+    @Test
+    public void getBluePrintTest() throws BlueprintPersistenceException, BlueprintNotFoundException{
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
 
+        Point[] pts0=new Point[]{new Point(40, 40),new Point(15, 15)};
+        Blueprint bp0=new Blueprint("mack", "mypaint",pts0);
+
+        ibpp.saveBlueprint(bp0);
+
+        Point[] pts=new Point[]{new Point(0, 0),new Point(10, 10)};
+        Blueprint bp=new Blueprint("john", "thepaint",pts);
+
+        ibpp.saveBlueprint(bp);
+
+        Blueprint test= ibpp.getBlueprint(bp.getAuthor(), bp.getName());
+        Blueprint test2= ibpp.getBlueprint(bp0.getAuthor(), bp0.getName());
+
+        assertEquals(bp,test);
+        assertEquals(bp0,test2);
+
+    }
+
+    @Test
+    public void getBluePrintByAuthorTest() throws BlueprintPersistenceException, BlueprintNotFoundException{
+        InMemoryBlueprintPersistence ibpp=new InMemoryBlueprintPersistence();
+
+        Point[] pts0=new Point[]{new Point(40, 40),new Point(15, 15)};
+        Blueprint bp0=new Blueprint("mack", "mypaint",pts0);
+
+        ibpp.saveBlueprint(bp0);
+
+        Point[] pts=new Point[]{new Point(0, 0),new Point(10, 10)};
+        Blueprint bp=new Blueprint("john", "thepaint",pts);
+
+        ibpp.saveBlueprint(bp);
+
+        Set<Blueprint> test= ibpp.getBlueprintsByAuthor(bp.getAuthor());
+        Set<Blueprint> test2= ibpp.getBlueprintsByAuthor(bp0.getAuthor());
+
+        assertTrue(test.contains(bp));
+        assertTrue(test2.contains(bp0));
+
+    }
     
 }

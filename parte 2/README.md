@@ -2,6 +2,11 @@
 
 ## Arquitecturas de Software
 
+## Miembros:
+
+Andres Felipe Calderon Ramirez
+Jose David Castillo Rodriguez
+
 # Componentes y conectores - Parte I.
 
 El ejercicio se debe traer terminado para el siguiente laboratorio (Parte II).
@@ -26,6 +31,17 @@ En este ejercicio se va a construír un modelo de clases para la capa lógica de
 
 
 2. Complete los operaciones getBluePrint() y getBlueprintsByAuthor(). Implemente todo lo requerido de las capas inferiores (por ahora, el esquema de persistencia disponible 'InMemoryBlueprintPersistence') agregando las pruebas correspondientes en 'InMemoryPersistenceTest'.
+
+Implementación de getBluePrint y getBlueprintsByAuthor:
+
+![](img/implement.png)
+
+Tests de los 2 metodos:
+
+![](img/testGetBluePrint.png)
+
+![](img/testGetBluePrintsByAuthor.png)
+
 
 3. Haga un programa en el que cree (mediante Spring) una instancia de BlueprintServices, y rectifique la funcionalidad del mismo: registrar planos, consultar planos, registrar planos específicos, etc.
 
