@@ -6,12 +6,14 @@
 package edu.eci.arsw.blueprints.services;
 
 import edu.eci.arsw.blueprints.model.Blueprint;
-import edu.eci.arsw.blueprints.model.Point;
+import edu.eci.arsw.blueprints.persistence.BluePrintFilter;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
+import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
+import java.util.HashSet;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +25,27 @@ import org.springframework.stereotype.Service;
 public class BlueprintsServices {
    
     @Autowired
-    BlueprintsPersistence bpp;
-    
+    private BlueprintsPersistence bpp;
+    @Autowired
+    private BluePrintFilter filter;
+
     public void addNewBlueprint(Blueprint bp){
-        
+        try {
+            bpp.saveBlueprint(bp);
+        } catch (BlueprintPersistenceException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     public Set<Blueprint> getAllBlueprints(){
+        Set<Blueprint> originals = bpp.getAllBluePrints();
+        Set<Blueprint> filtered = new HashSet<>();
 
-        return null;
+        for (Blueprint bp : originals) {
+            filtered.add(filter.applyFilter(bp));
+        }
+
+        return filtered;
     }
     
     /**
@@ -42,7 +56,7 @@ public class BlueprintsServices {
      * @throws BlueprintNotFoundException if there is no such blueprint
      */
     public Blueprint getBlueprint(String author,String name) throws BlueprintNotFoundException{
-        return bpp.getBlueprint(author,name);
+        return filter.applyFilter(bpp.getBlueprint(author,name));
     }
     
     /**
@@ -52,7 +66,13 @@ public class BlueprintsServices {
      * @throws BlueprintNotFoundException if the given author doesn't exist
      */
     public Set<Blueprint> getBlueprintsByAuthor(String author) throws BlueprintNotFoundException{
-        return bpp.getBlueprintsByAuthor(author);
+        Set<Blueprint> originals = bpp.getBlueprintsByAuthor(author);
+        Set<Blueprint> filtered = new HashSet<>();
+
+        for (Blueprint bp : originals) {
+            filtered.add(filter.applyFilter(bp));
+        }
+
+        return filtered;
     }
-    
 }
